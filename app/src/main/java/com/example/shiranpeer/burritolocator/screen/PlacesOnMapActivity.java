@@ -32,8 +32,13 @@ public class PlacesOnMapActivity extends FragmentActivity implements OnMapReadyC
         binding = DataBindingUtil.setContentView(this, R.layout.activity_places_on_map);
 
 
+
         MapLayoutBinding mapLayoutBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.map_layout, binding.frameLayout, true);
 
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.gmap);
+        mapFragment.getMapAsync(this);
 
         if(getIntent() != null){
             lng = getIntent().getDoubleExtra("lng", 0);
@@ -42,13 +47,9 @@ public class PlacesOnMapActivity extends FragmentActivity implements OnMapReadyC
             address = getIntent().getStringExtra("address");
 
 
+            mapLayoutBinding.toolbar.setTitle(name);
             mapLayoutBinding.textViewAddress.setText(address);
         }
-
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.gmap);
-        mapFragment.getMapAsync(this);
     }
 
     @Override
@@ -69,11 +70,6 @@ public class PlacesOnMapActivity extends FragmentActivity implements OnMapReadyC
         mMap.addMarker(markerOptions);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(placeLoc));
 
-//        mapSubject.subscribe(googleMap1 -> {
-//            LatLng position = new LatLng(lat, lng);
-//            mMap.addMarker(new MarkerOptions()
-//                    .position(position));
-//            mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
-//        });
+
     }
 }

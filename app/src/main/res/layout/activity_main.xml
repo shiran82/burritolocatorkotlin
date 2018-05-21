@@ -4,7 +4,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#f2f2f2">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -12,6 +13,7 @@
             android:layout_height="56dp"
             android:background="#6E00FF"
             android:elevation="12dp"
+            android:paddingLeft="16dp"
             app:titleTextColor="#FFFFFF" />
 
         <ProgressBar

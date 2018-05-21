@@ -57,10 +57,10 @@ public class MainActivity extends Activity implements MainActivityMvpView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme_Launcher);
+//        setTheme(R.style.AppTheme_Launcher);
         super.onCreate(savedInstanceState);
 
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+//        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
