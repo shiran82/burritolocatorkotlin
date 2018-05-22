@@ -46,6 +46,7 @@ public class MainActivity extends Activity implements MainActivityMvpView, Conne
     private double lat;
     private String pageToken;
     private boolean refreshRequired;
+    private ConnectivityReceiver connectivityReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,13 +58,12 @@ public class MainActivity extends Activity implements MainActivityMvpView, Conne
 
         refreshRequired = false;
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        } else {
-            fetchLocationAndFindNearbyPlaces();
-        }
+        binding.buttonFindMyBurrito.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                initialize();
+            }
+        });
     }
 
     @Override
@@ -176,7 +176,7 @@ public class MainActivity extends Activity implements MainActivityMvpView, Conne
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 
-        ConnectivityReceiver connectivityReceiver = new ConnectivityReceiver();
+        connectivityReceiver = new ConnectivityReceiver();
         registerReceiver(connectivityReceiver, intentFilter);
 
         ConnectivityReceiver.connectivityReceiverListener = this;
@@ -204,11 +204,30 @@ public class MainActivity extends Activity implements MainActivityMvpView, Conne
         });
     }
 
+    private void initialize() {
+        binding.buttonFindMyBurrito.setVisibility(View.GONE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        } else {
+            fetchLocationAndFindNearbyPlaces();
+        }
+    }
+
     private void closeApp() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             finishAffinity();
         } else {
             finish();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (connectivityReceiver != null) {
+            unregisterReceiver(connectivityReceiver);
         }
     }
 }
