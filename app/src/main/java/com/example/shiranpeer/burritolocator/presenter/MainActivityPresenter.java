@@ -44,13 +44,6 @@ public class MainActivityPresenter {
         }
     }
 
-//    public void requestNearbyPlacesAdditionalResults(String pageToken, String apiKey) {
-//        //delay added because of google map api - according to the documentation: "There is a short
-//        // delay between when a next_page_token is issued, and when it will become valid."
-//        Completable.timer(750, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-//                .subscribe(() -> MainActivityPresenter.this.requestNearbyPlacesAdditionalResultsAfterDelay(pageToken, apiKey));
-//    }
-
     public void requestNearbyPlacesAdditionalResults(String pageToken, String apiKey) {
         if (!mvpView.isNetworkAvailable()) {
             mvpView.hideProgressBarLoader();
@@ -74,7 +67,6 @@ public class MainActivityPresenter {
                                 mvpView.showNetworkErrorMessageForLoading();
                                 mvpView.hideProgressBarLoader();
                             });
-
         }
     }
 }
