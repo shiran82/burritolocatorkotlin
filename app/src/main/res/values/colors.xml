@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorLaunch">#F4F4F3</color>
+    <color name="light_gray">#f2f2f2</color>
+    <color name="burrito_purple">#6E00FF</color>
+    <color name="burrito_purple_text">#6E10E9</color>
 </resources>

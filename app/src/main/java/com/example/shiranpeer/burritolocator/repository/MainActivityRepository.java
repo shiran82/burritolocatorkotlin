@@ -1,6 +1,6 @@
-package com.example.shiranpeer.burritolocator.presenter;
+package com.example.shiranpeer.burritolocator.repository;
 
-import com.example.shiranpeer.burritolocator.PlacesResult;
+import com.example.shiranpeer.burritolocator.model.PlacesResult;
 
 import io.reactivex.Observable;
 

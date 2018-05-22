@@ -1,6 +1,6 @@
 package com.example.shiranpeer.burritolocator.service;
 
-import com.example.shiranpeer.burritolocator.PlacesResult;
+import com.example.shiranpeer.burritolocator.model.PlacesResult;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;

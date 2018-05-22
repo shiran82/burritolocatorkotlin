@@ -5,16 +5,16 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#f2f2f2">
+        android:background="@color/light_gray">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="#6E00FF"
-            android:elevation="12dp"
-            android:paddingLeft="16dp"
-            app:titleTextColor="#FFFFFF" />
+            android:layout_height="@dimen/toolbar_default_height"
+            android:background="@color/burrito_purple"
+            android:elevation="4dp"
+            android:paddingStart="@dimen/horizontal_margin"
+            app:titleTextColor="@android:color/white" />
 
         <ProgressBar
             android:id="@+id/progress_bar"
@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/toolbar"
-            android:background="#f2f2f2"
+            android:background="@color/light_gray"
             android:visibility="gone">
 
         </android.support.v7.widget.RecyclerView>

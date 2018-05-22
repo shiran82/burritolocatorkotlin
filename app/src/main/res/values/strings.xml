@@ -1,4 +1,9 @@
 <resources>
-    <string name="app_name">burritolocator</string>
+    <string name="app_name">Find my burrito</string>
     <string name="title_activity_maps">Map</string>
+    <string name="gps_error_message">Please turn on location or move to a place with better signal</string>
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
+    <string name="network_error_message">You might be offline, please check connection to try again</string>
+    <string name="network_error_message_for_loading">You might be offline, try to reconnect to load more results</string>
 </resources>

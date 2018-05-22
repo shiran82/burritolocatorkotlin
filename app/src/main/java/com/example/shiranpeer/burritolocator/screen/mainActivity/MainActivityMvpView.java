@@ -1,4 +1,4 @@
-package com.example.shiranpeer.burritolocator.screen;
+package com.example.shiranpeer.burritolocator.screen.mainActivity;
 
 import com.example.shiranpeer.burritolocator.model.Place;
 import com.example.shiranpeer.burritolocator.screen.base.MvpView;
@@ -13,4 +13,8 @@ public interface MainActivityMvpView extends MvpView {
      void hideProgressBar();
 
      void showProgressBar();
+
+    void showGPSErrorMessage();
+
+    void showNetworkErrorMessageForLoading();
 }

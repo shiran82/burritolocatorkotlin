@@ -1,7 +1,6 @@
 package com.example.shiranpeer.burritolocator.repository;
 
-import com.example.shiranpeer.burritolocator.PlacesResult;
-import com.example.shiranpeer.burritolocator.presenter.MainActivityRepository;
+import com.example.shiranpeer.burritolocator.model.PlacesResult;
 import com.example.shiranpeer.burritolocator.service.PlacesService;
 import com.example.shiranpeer.burritolocator.service.APIClient;
 

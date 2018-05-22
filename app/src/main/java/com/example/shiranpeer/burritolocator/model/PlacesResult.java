@@ -1,6 +1,5 @@
-package com.example.shiranpeer.burritolocator;
+package com.example.shiranpeer.burritolocator.model;
 
-import com.example.shiranpeer.burritolocator.model.Place;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -11,6 +10,7 @@ public class PlacesResult implements Serializable {
     private List<Place> places;
     @SerializedName("next_page_token")
     private String nextPageToken;
+    private String status;
 
     public List<Place> getPlaces() {
         return places;
@@ -26,5 +26,13 @@ public class PlacesResult implements Serializable {
 
     public void setNextPageToken(String nextPageToken) {
         this.nextPageToken = nextPageToken;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
