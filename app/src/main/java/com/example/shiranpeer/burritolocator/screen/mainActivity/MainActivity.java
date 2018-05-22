@@ -159,6 +159,29 @@ public class MainActivity extends Activity implements MainActivityMvpView, Conne
         return NetworkUtil.isNetworkAvailable(this);
     }
 
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        if (!Strings.isNullOrEmpty(pageToken) && isConnected && refreshRequired) {
+            Toast.makeText(this, getString(R.string.online_again), Toast.LENGTH_LONG).show();
+            presenter.requestNearbyPlacesAdditionalResults(pageToken, getString(R.string.google_maps_key));
+            pageToken = "";
+            refreshRequired = false;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+
+        ConnectivityReceiver connectivityReceiver = new ConnectivityReceiver();
+        registerReceiver(connectivityReceiver, intentFilter);
+
+        ConnectivityReceiver.connectivityReceiverListener = this;
+    }
+
     @SuppressLint("MissingPermission")
     private void fetchLocationAndFindNearbyPlaces() {
 
@@ -181,34 +204,11 @@ public class MainActivity extends Activity implements MainActivityMvpView, Conne
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-
-        ConnectivityReceiver connectivityReceiver = new ConnectivityReceiver();
-        registerReceiver(connectivityReceiver, intentFilter);
-
-        ConnectivityReceiver.connectivityReceiverListener = this;
-    }
-
     private void closeApp() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             finishAffinity();
         } else {
             finish();
-        }
-    }
-
-    @Override
-    public void onNetworkConnectionChanged(boolean isConnected) {
-        if (!Strings.isNullOrEmpty(pageToken) && isConnected && refreshRequired) {
-            Toast.makeText(this, getString(R.string.online_again), Toast.LENGTH_LONG).show();
-            presenter.requestNearbyPlacesAdditionalResults(pageToken, getString(R.string.google_maps_key));
-            pageToken = "";
-            refreshRequired = false;
         }
     }
 }
