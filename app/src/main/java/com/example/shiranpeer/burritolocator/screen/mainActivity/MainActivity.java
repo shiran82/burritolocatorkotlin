@@ -89,6 +89,7 @@ public class MainActivity extends Activity implements MainActivityMvpView, Conne
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if (!Strings.isNullOrEmpty(pageToken)) {
+                    binding.progressBarLoader.setVisibility(View.VISIBLE);
                     presenter.requestNearbyPlacesAdditionalResults(pageToken, getString(R.string.google_maps_key));
                 }
             }
@@ -101,6 +102,7 @@ public class MainActivity extends Activity implements MainActivityMvpView, Conne
 
     @Override
     public void showNearbyAdditionalPlaces(List<com.example.shiranpeer.burritolocator.model.Place> places, String nextPageToken) {
+        binding.progressBarLoader.setVisibility(View.INVISIBLE);
         this.pageToken = nextPageToken;
         recyclerViewAdapter.addItems(places);
     }
@@ -108,6 +110,11 @@ public class MainActivity extends Activity implements MainActivityMvpView, Conne
     @Override
     public void hideProgressBar() {
         binding.progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideProgressBarLoader() {
+        binding.progressBarLoader.setVisibility(View.INVISIBLE);
     }
 
     @Override

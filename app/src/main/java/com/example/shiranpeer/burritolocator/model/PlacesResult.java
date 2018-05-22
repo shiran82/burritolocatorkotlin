@@ -11,6 +11,7 @@ public class PlacesResult implements Serializable {
     @SerializedName("next_page_token")
     private String nextPageToken;
     private String status;
+    private int requestRetry;
 
     public List<Place> getPlaces() {
         return places;
@@ -34,5 +35,13 @@ public class PlacesResult implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getRequestRetry() {
+        return requestRetry;
+    }
+
+    public void setRequestRetry(int requestRetry) {
+        this.requestRetry = requestRetry;
     }
 }

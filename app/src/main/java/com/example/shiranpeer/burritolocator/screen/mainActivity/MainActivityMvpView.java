@@ -17,4 +17,6 @@ public interface MainActivityMvpView extends MvpView {
     void showGPSErrorMessage();
 
     void showNetworkErrorMessageForLoading();
+
+    void hideProgressBarLoader();
 }
