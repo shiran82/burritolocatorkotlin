@@ -101,7 +101,7 @@ public class MainActivityPresenterTest {
 
         presenter.requestNearbyPlacesAdditionalResults("token", "key");
 
-        verify(mockMvpView).showNetworkErrorMessage();
+        verify(mockMvpView).showNetworkErrorMessageForLoading();
         verify(mockMvpView, never()).showGPSErrorMessage();
         verify(mockMvpView, never()).showNearbyAdditionalPlaces(anyList(), anyString());
     }

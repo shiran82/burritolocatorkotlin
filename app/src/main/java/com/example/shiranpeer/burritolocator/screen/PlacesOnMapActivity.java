@@ -1,6 +1,7 @@
 package com.example.shiranpeer.burritolocator.screen;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import com.example.shiranpeer.burritolocator.R;
 import com.example.shiranpeer.burritolocator.databinding.MapLayoutBinding;
 import com.example.shiranpeer.burritolocator.presenter.PlacesOnMapActivityPresenter;
 import com.example.shiranpeer.burritolocator.util.NetworkUtil;
+import com.example.shiranpeer.burritolocator.util.StringUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -31,6 +33,7 @@ public class PlacesOnMapActivity extends FragmentActivity implements PlacesOnMap
     private double lat;
     private String name;
     private String address;
+    private int priceLevel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,21 +56,24 @@ public class PlacesOnMapActivity extends FragmentActivity implements PlacesOnMap
                 .findFragmentById(R.id.fragment_map);
         mapFragment.getMapAsync(this);
 
-        if(getIntent() != null){
-            lng = getIntent().getDoubleExtra(Constant.EXTRA_LNG, 0);
-            lat = getIntent().getDoubleExtra(Constant.EXTRA_LAT, 0);
-            name = getIntent().getStringExtra(Constant.EXTRA_NAME);
-            address = getIntent().getStringExtra(Constant.EXTRA_ADDRESS);
+        Intent intent = getIntent();
 
-            mapLayoutBinding.toolbar.setTitle(name);
+        if(intent != null){
+            lng = intent.getDoubleExtra(Constant.EXTRA_LNG, 0);
+            lat = intent.getDoubleExtra(Constant.EXTRA_LAT, 0);
+            name = intent.getStringExtra(Constant.EXTRA_NAME);
+            address = intent.getStringExtra(Constant.EXTRA_ADDRESS);
+            priceLevel = intent.getIntExtra(Constant.EXTRA_PRICE_LEVEL, 0);
+
+            mapLayoutBinding.toolbar.toolbar.setTitle(name);
             mapLayoutBinding.textViewAddress.setText(address);
+            mapLayoutBinding.textViewPrice.setText(StringUtil.dollarBuilder(priceLevel));
         }
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
-
         this.googleMap.getUiSettings().setZoomControlsEnabled(true);
         this.googleMap.setMinZoomPreference(MIN_ZOOM_PREFERENCE);
 

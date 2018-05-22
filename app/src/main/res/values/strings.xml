@@ -6,4 +6,5 @@
     <string name="cancel">CANCEL</string>
     <string name="network_error_message">You might be offline, please check connection to try again</string>
     <string name="network_error_message_for_loading">You might be offline, try to reconnect to load more results</string>
+    <string name="online_again">Looks like you are online again, retrying...</string>
 </resources>

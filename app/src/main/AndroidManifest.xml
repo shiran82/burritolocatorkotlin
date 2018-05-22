@@ -11,9 +11,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@android:style/Theme.Holo.Light.NoActionBar">
         <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyALCKLY7PD9Ke-xh2JVZi3IH0UCatbP_HI" />
-        <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
@@ -30,6 +27,14 @@
         <activity
             android:name=".screen.PlacesOnMapActivity"
             android:screenOrientation="portrait" />
+
+        <receiver
+            android:name=".receiver.ConnectivityReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

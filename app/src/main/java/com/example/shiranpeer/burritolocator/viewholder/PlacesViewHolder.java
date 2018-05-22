@@ -45,6 +45,7 @@ public class PlacesViewHolder extends RecyclerView.ViewHolder {
         intent.putExtra(Constant.EXTRA_ADDRESS, place.getVicinity());
         intent.putExtra(Constant.EXTRA_LAT, place.getGeometry().getLocation().getLat());
         intent.putExtra(Constant.EXTRA_LNG, place.getGeometry().getLocation().getLng());
+        intent.putExtra(Constant.EXTRA_PRICE_LEVEL, place.getPriceLevel());
 
         context.startActivity(intent);
     }

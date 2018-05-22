@@ -7,14 +7,10 @@
         android:layout_height="match_parent"
         android:background="@color/light_gray">
 
-        <android.support.v7.widget.Toolbar
+
+        <include
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/toolbar_default_height"
-            android:background="@color/burrito_purple"
-            android:elevation="4dp"
-            android:paddingStart="@dimen/horizontal_margin"
-            app:titleTextColor="@android:color/white" />
+            layout="@layout/view_toolbar" />
 
         <ProgressBar
             android:id="@+id/progress_bar"

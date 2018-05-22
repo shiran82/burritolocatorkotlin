@@ -4,9 +4,10 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,11 +15,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.shiranpeer.burritolocator.R;
 import com.example.shiranpeer.burritolocator.adapter.PlacesRecyclerViewAdapter;
 import com.example.shiranpeer.burritolocator.databinding.ActivityMainBinding;
 import com.example.shiranpeer.burritolocator.presenter.MainActivityPresenter;
+import com.example.shiranpeer.burritolocator.receiver.ConnectivityReceiver;
 import com.example.shiranpeer.burritolocator.repository.MainActivityDataRepository;
 import com.example.shiranpeer.burritolocator.screen.EndlessRecyclerViewScrollListener;
 import com.example.shiranpeer.burritolocator.util.NetworkUtil;
@@ -28,7 +31,7 @@ import com.google.common.base.Strings;
 
 import java.util.List;
 
-public class MainActivity extends Activity implements MainActivityMvpView {
+public class MainActivity extends Activity implements MainActivityMvpView, ConnectivityReceiver.ConnectivityReceiverListener {
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private static final String TYPES = "restaurant, food";
     private static final String BURRITO = "burrito";
@@ -41,6 +44,8 @@ public class MainActivity extends Activity implements MainActivityMvpView {
 
     private double lng;
     private double lat;
+    private String pageToken;
+    private boolean refreshRequired;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +53,9 @@ public class MainActivity extends Activity implements MainActivityMvpView {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        binding.toolbar.setTitle(R.string.app_name);
+        binding.toolbar.toolbar.setTitle(R.string.app_name);
+
+        refreshRequired = false;
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
@@ -75,13 +82,14 @@ public class MainActivity extends Activity implements MainActivityMvpView {
 
     @Override
     public void showNearbyPlaces(List<com.example.shiranpeer.burritolocator.model.Place> places, String nextPageToken) {
+        this.pageToken = nextPageToken;
         recyclerViewAdapter = new PlacesRecyclerViewAdapter(places);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         binding.recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                if (!Strings.isNullOrEmpty(nextPageToken)) {
-                    presenter.requestNearbyPlacesAdditionalResults(nextPageToken, getString(R.string.google_maps_key));
+                if (!Strings.isNullOrEmpty(pageToken)) {
+                    presenter.requestNearbyPlacesAdditionalResults(pageToken, getString(R.string.google_maps_key));
                 }
             }
         });
@@ -93,6 +101,7 @@ public class MainActivity extends Activity implements MainActivityMvpView {
 
     @Override
     public void showNearbyAdditionalPlaces(List<com.example.shiranpeer.burritolocator.model.Place> places, String nextPageToken) {
+        this.pageToken = nextPageToken;
         recyclerViewAdapter.addItems(places);
     }
 
@@ -134,6 +143,7 @@ public class MainActivity extends Activity implements MainActivityMvpView {
 
     @Override
     public void showNetworkErrorMessageForLoading() {
+        refreshRequired = true;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.network_error_message_for_loading)
                 .setPositiveButton(R.string.ok, (dialog, id) -> dialog.dismiss());
@@ -171,11 +181,34 @@ public class MainActivity extends Activity implements MainActivityMvpView {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+
+        ConnectivityReceiver connectivityReceiver = new ConnectivityReceiver();
+        registerReceiver(connectivityReceiver, intentFilter);
+
+        ConnectivityReceiver.connectivityReceiverListener = this;
+    }
+
     private void closeApp() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             finishAffinity();
         } else {
             finish();
+        }
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        if (!Strings.isNullOrEmpty(pageToken) && isConnected && refreshRequired) {
+            Toast.makeText(this, getString(R.string.online_again), Toast.LENGTH_LONG).show();
+            presenter.requestNearbyPlacesAdditionalResults(pageToken, getString(R.string.google_maps_key));
+            pageToken = "";
+            refreshRequired = false;
         }
     }
 }

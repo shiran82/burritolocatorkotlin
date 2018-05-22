@@ -1,11 +1,18 @@
 package com.example.shiranpeer.burritolocator.presenter;
 
+import android.util.Log;
+
+import com.example.shiranpeer.burritolocator.model.PlacesResult;
 import com.example.shiranpeer.burritolocator.repository.MainActivityRepository;
 import com.example.shiranpeer.burritolocator.screen.mainActivity.MainActivityMvpView;
 import com.google.android.gms.common.api.Status;
 
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -46,15 +53,26 @@ public class MainActivityPresenter {
     }
 
     public void requestNearbyPlacesAdditionalResults(String pageToken, String apiKey) {
+        //delay added because of google map api - according to the documentation: "There is a short
+        // delay between when a next_page_token is issued, and when it will become valid."
+        Completable.timer(750, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .subscribe(() -> MainActivityPresenter.this.requestNearbyPlacesAdditionalResultsAfterDelay(pageToken, apiKey));
+    }
+
+    public void requestNearbyPlacesAdditionalResultsAfterDelay(String pageToken, String apiKey) {
         if (!mvpView.isNetworkAvailable()) {
             mvpView.showNetworkErrorMessageForLoading();
         } else {
             subscription = repository.getNearbyPlacesAdditionalResults(pageToken, apiKey)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(placesResult -> mvpView.showNearbyAdditionalPlaces(placesResult.getPlaces(),
-                            placesResult.getNextPageToken()),
-                            e -> mvpView.showNetworkErrorMessageForLoading());
+                    .subscribe(placesResult -> {
+                        mvpView.showNearbyAdditionalPlaces(placesResult.getPlaces(),
+                                placesResult.getNextPageToken());
+                    },
+                            e -> {
+                                mvpView.showNetworkErrorMessageForLoading();
+                            });
         }
     }
 }

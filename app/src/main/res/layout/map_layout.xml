@@ -12,14 +12,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <android.support.v7.widget.Toolbar
+        <include
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/toolbar_default_height"
-            android:background="@color/burrito_purple"
-            android:elevation="4dp"
-            android:paddingLeft="@dimen/horizontal_margin"
-            app:titleTextColor="@android:color/white" />
+            layout="@layout/view_toolbar" />
 
         <LinearLayout
             android:layout_width="match_parent"
