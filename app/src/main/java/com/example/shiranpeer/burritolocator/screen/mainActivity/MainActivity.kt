@@ -74,7 +74,7 @@ class MainActivity : Activity(), MainActivityMvpView, ConnectivityReceiver.Conne
         val layoutManager = LinearLayoutManager(applicationContext)
         binding!!.recyclerView.addOnScrollListener(object : EndlessRecyclerViewScrollListener(layoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-                if (pageToken?.length != 0) {
+                if (pageToken!!.isNotEmpty()) {
                     binding!!.progressBarLoader.visibility = View.VISIBLE
                     presenter!!.requestNearbyPlacesAdditionalResults(pageToken!!, getString(R.string.google_maps_key))
                 }
@@ -141,7 +141,7 @@ class MainActivity : Activity(), MainActivityMvpView, ConnectivityReceiver.Conne
     }
 
     override fun onNetworkConnectionChanged(isConnected: Boolean) {
-        if (pageToken?.length != 0 && isConnected && refreshRequired) {
+        if (pageToken!!.isNotEmpty() && isConnected && refreshRequired) {
             Toast.makeText(this, getString(R.string.online_again), Toast.LENGTH_LONG).show()
             presenter!!.requestNearbyPlacesAdditionalResults(pageToken!!, getString(R.string.google_maps_key))
             pageToken = ""

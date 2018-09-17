@@ -9,8 +9,7 @@ import android.net.NetworkInfo
 class ConnectivityReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, arg1: Intent) {
-        val cm = context
-                .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork = cm.activeNetworkInfo
         val isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting
 

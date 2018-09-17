@@ -21,8 +21,7 @@ class MainActivityPresenter(private val repository: MainActivityRepository, priv
                             mvpView.hideProgressBar()
                             placesResult.nextPageToken!!.let { token ->
                                 placesResult.places!!.let { places ->
-                                    mvpView.showNearbyPlaces(places,
-                                            token)
+                                    mvpView.showNearbyPlaces(places, token)
                                 }
                             }
                         } else {
@@ -53,10 +52,9 @@ class MainActivityPresenter(private val repository: MainActivityRepository, priv
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ placesResult ->
-                        placesResult.places!!.let {
-                            placesResult.nextPageToken!!.let { it1 ->
-                                mvpView.showNearbyAdditionalPlaces(it,
-                                        it1)
+                        placesResult.places!!.let { places ->
+                            placesResult.nextPageToken!!.let { token ->
+                                mvpView.showNearbyAdditionalPlaces(places, token)
                             }
                         }
                     }
